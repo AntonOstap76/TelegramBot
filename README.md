@@ -1,6 +1,6 @@
 # Habit Tracker Telegram Bot 🤖
 
-![Habit Tracker]()
+<img src="image/photo_2025-09-17_22-52-40.jpg" alt="Habit Tracker" width="500" height="500"/>
 
 ## Overview
 This project is a **Telegram bot** designed to help users track their daily habits and improve productivity. The bot allows users to create, manage, and monitor habits directly from Telegram, making habit tracking simple and accessible anywhere.
