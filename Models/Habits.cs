@@ -1,7 +1,7 @@
 ﻿namespace TelegramBot;
 
 
-public class Model
+public class Habits
 {
     public int Id { get; set; }           // Primary Key
     public long UserId { get; set; }      // Telegram chat ID

@@ -10,10 +10,6 @@ public class HabitContextFactory: IDesignTimeDbContextFactory<HabitContext>
 {
 public HabitContext CreateDbContext(string[] args)
 {
-    // var configuration = new ConfigurationBuilder()
-    //     .SetBasePath(Directory.GetCurrentDirectory())
-    //     .AddJsonFile("appsettings.json")
-    //     .Build();
     
     var builder = new ConfigurationBuilder()
         .AddJsonFile($"appsettings.json", true, true);
