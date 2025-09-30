@@ -35,7 +35,17 @@ public class MessageHandler
     switch (message.Text)
     {
         case "/start":
-            await _botClient.SendMessage(chatId, "Hi there, <b>What you want to do?</b>", ParseMode.Html,
+            
+            string welcomeMessage = 
+                "<b>Welcome to HabbitTrakerBot!</b>\n\n" +
+                "I'm here to help you build better habits and stay consistent every day. ✨\n\n" +
+                "Here’s what you can do:\n" +
+                "📌 Add new habits\n" +
+                "📖 View your current habits\n" +
+                "✅ Track your progress\n\n" +
+                "<i>So... what would you like to do first?</i>";
+            
+            await _botClient.SendMessage(chatId, welcomeMessage, ParseMode.Html,
                 replyMarkup: _keyboardService.GetMainKeyboard());
             break;
         
@@ -98,6 +108,13 @@ public class MessageHandler
         
         
         case "Help" or  "/help":
+            await _botClient.SendMessage(chatId, "This Bot has a few commands to use: \n"+
+                                                 "/add - his command add a habit to your list of habits\n"+
+                                                 "/list - his command list all your habits\n"+ 
+                                                     "/delete - allow you to delete habit from your list\n " +
+                                                     "/done - by this command you mark your habit as done and put it into another done list \n"+
+                                                     "/history - this command show you what habits you mark as done",
+                replyMarkup: _keyboardService.GetMainKeyboard());   
                 break;
         case "History" or "/history":
 

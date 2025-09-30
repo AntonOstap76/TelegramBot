@@ -9,7 +9,7 @@ public class KeyboardService
         return new ReplyKeyboardMarkup(new[]
         {
             new KeyboardButton[] { " Add", " List", "History" },
-            new KeyboardButton[] { " Delete", "Done" }
+            new KeyboardButton[] { " Delete", "Done", "Help" }
         })
         {
             ResizeKeyboard = true
