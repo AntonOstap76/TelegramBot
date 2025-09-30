@@ -10,13 +10,16 @@ public class BotService
     private readonly MessageHandler _messageHandler;
     private readonly CallbackHandler _callbackHandler; 
     private CancellationTokenSource? _cts;
+    private readonly Schedule _schedule;
 
-    public BotService(TelegramBotClient telegramBotClient ,MessageHandler messageHandler , CallbackHandler callbackHandler)
+    public BotService(TelegramBotClient telegramBotClient ,MessageHandler messageHandler ,
+        CallbackHandler callbackHandler, Schedule schedule)
     {
         
         _messageHandler = messageHandler;
         _callbackHandler = callbackHandler;
         _telegramBotClient = telegramBotClient;
+        _schedule = schedule;
     }
 
     public async Task StartAsync()
@@ -36,7 +39,9 @@ public class BotService
         
         var me = await _telegramBotClient.GetMe();
         Console.WriteLine($"Bot {me.Username} started.");
-
+        
+        _schedule.ScheduleNextMessage();
+        
         // keep running forever
         await Task.Delay(-1, _cts.Token);
         

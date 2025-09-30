@@ -61,5 +61,10 @@ public class HabitService
     {
         return await GetAllHabits(chatId, done:true);
     }
-    
+
+    public async Task<List<long>> GetAllUsers()
+    {
+        return await _habitContext.Habits
+            .Select(h => h.UserId).Distinct().ToListAsync();
+    }
 }

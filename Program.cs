@@ -13,12 +13,6 @@ public class Program
     {
         var builder = new ConfigurationBuilder().AddJsonFile($"appsettings.json",true,true);
         var config = builder.Build();
-        // var token = config["TOKEN"];
-        
-        
-        // var optionsBuilder = new DbContextOptionsBuilder<HabitContext>();
-        // optionsBuilder.UseSqlServer(config["ConnectionStrings:DefaultConnection"]);
-        
         
         var services = new ServiceCollection();
 
@@ -38,6 +32,7 @@ public class Program
         
         services.AddTransient<MessageHandler>();
         services.AddTransient<CallbackHandler>();
+        services.AddScoped<Schedule>();
         services.AddTransient<BotService>();
 
         var provider = services.BuildServiceProvider();

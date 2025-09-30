@@ -22,4 +22,4 @@ This project is a **Telegram bot** designed to help users track their daily habi
 ## Usage
 - Start your bot in Telegram.
 - Use `/start` to initialize.
-- Use commands like `/addhabit`, `/listhabits`, `/completehabit` to manage your habits.
+- Use commands like `/add`, `/list`, `/delete`, `/done`, `/history` to manage your habits.
