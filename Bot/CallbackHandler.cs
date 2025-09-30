@@ -43,20 +43,20 @@ public class CallbackHandler
         
         // done a habit
         if (callback.Data!.StartsWith("done:") &&
-                 int.TryParse(callback.Data.Split(":")[1], out var k))
+            int.TryParse(callback.Data.Split(":")[1], out var k))
         {
-            var finished = await _habitService.MarkAsDone(chatId,k-1);
-            
+            var finished = await _habitService.MarkAsDone(chatId, k - 1);
 
             if (finished != null)
             {
-                await _botClient.SendMessage(chatId, $"The habit <b>{finished.Habit}</b> is now marked as DONE!",
+                await _botClient.SendMessage(chatId,
+                    $"✅ Habit <b>{finished.Habit}</b> is marked as DONE!\n" +
+                    $"🔥 Current Streak: {finished.CurrentStreak}\n" +
+                    $"🏆 Longest Streak: {finished.LongestStreak}",
                     ParseMode.Html,
                     replyMarkup: _keyboardService.GetMainKeyboard());
                 return;
             };
-
-            
         }
         
         await _botClient.SendMessage(chatId, 

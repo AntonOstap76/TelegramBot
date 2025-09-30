@@ -32,9 +32,9 @@ public class KeyboardService
     public InlineKeyboardMarkup GetDoneKeyboard(List<string> habits)
     {
         var buttons = habits
-            .Select((t, i) => InlineKeyboardButton.WithCallbackData(
-                text: $"{i + 1}.{t}",
-                callbackData: $"done:{i + 1}"))
+            .Select((habit, index) => InlineKeyboardButton.WithCallbackData(
+                text: $"{index + 1}.{habit}",
+                callbackData: $"done:{index+1}"))
             .Chunk(5)
             .Select(row => row.ToArray())
             .ToArray();

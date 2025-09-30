@@ -91,18 +91,21 @@ public class MessageHandler
         case "Done" or "/done" :
             
             var habitsDone = await _habitService.GetAllHabits(chatId);
+
             if (habitsDone.Any())
             {
-                var markup = _keyboardService.GetDoneKeyboard(habitsDone.Select(d=>d.Habit).ToList());
+                var markup = _keyboardService.GetDoneKeyboard(habitsDone.Select(h => h.Habit).ToList());
 
-                await _botClient.SendMessage(chatId, "<em>Choose what habit you want to mark as DONE </em>",
+                await _botClient.SendMessage(chatId,
+                    "<em>Choose what habit you want to mark as DONE:</em>",
                     ParseMode.Html,
                     replyMarkup: markup);
             }
             else
             {
-                await _botClient.SendMessage(chatId, 
-                    " Your task list is empty....", replyMarkup: _keyboardService.GetMainKeyboard());
+                await _botClient.SendMessage(chatId,
+                    "Your habit list is empty...",
+                    replyMarkup: _keyboardService.GetMainKeyboard());
             }
             break;
         
@@ -112,25 +115,31 @@ public class MessageHandler
                                                  "/add - his command add a habit to your list of habits\n"+
                                                  "/list - his command list all your habits\n"+ 
                                                      "/delete - allow you to delete habit from your list\n " +
-                                                     "/done - by this command you mark your habit as done and put it into another done list \n"+
+                                                     "/done - by this command you mark your habit as done and make your streak longer \n"+
                                                      "/history - this command show you what habits you mark as done",
                 replyMarkup: _keyboardService.GetMainKeyboard());   
                 break;
+        
+        
+        
         case "History" or "/history":
-
             var doneHabits = await _habitService.GetDoneHabits(chatId);
-            
+
             if (doneHabits.Any())
             {
-                var list = string.Join("\n", doneHabits.Select((t, i) => $"{i + 1}. {t.Habit}"));
-                await _botClient.SendMessage(chatId, "Your done habits:\n" + list);
+                var list = string.Join("\n", doneHabits.Select((t, i) =>
+                    $"{i + 1}. {t.Habit} — Last done: {t.LastCompletedDate:dd MMM}\n" +
+                    $"Current streak: {t.CurrentStreak}, Longest streak: {t.LongestStreak}"
+                ));
+
+                await _botClient.SendMessage(chatId, "✅ Your done habits:\n" + list);
             }
             else
             {
-                await _botClient.SendMessage(chatId, " Your task list is empty....", replyMarkup: _keyboardService.GetMainKeyboard());
+                await _botClient.SendMessage(chatId, "Your task list is empty...", replyMarkup: _keyboardService.GetMainKeyboard());
             }
-
             break;
+        
         default:
             // check if user is in "adding" mode
             if (_userState.TryGetValue(chatId, out var state) && state == "adding")

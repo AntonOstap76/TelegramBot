@@ -18,7 +18,7 @@ public class HabitService
         {
             UserId = chatId,
             Habit = title,
-            IsDone = false
+            
         };
         _habitContext.Habits.Add(habit);
         await _habitContext.SaveChangesAsync();
@@ -28,7 +28,7 @@ public class HabitService
     public async Task<List<Habits>> GetAllHabits(long chatId, bool done = false)
     {
         return await _habitContext.Habits
-            .Where(h => h.UserId == chatId && h.IsDone == done)
+            .Where(h => h.UserId == chatId )
             .OrderBy(h => h.Id)
             .ToListAsync();
     }
@@ -45,21 +45,39 @@ public class HabitService
 
     public async Task<Habits?> MarkAsDone(long chatId, int index)
     {
-        var habits = await GetAllHabits(chatId, done: false);
+        var habits = await GetAllHabits(chatId); // get all habits 
 
-        if (index < 0 || index > habits.Count) return null;
+        if (index < 0 || index >= habits.Count) return null;
 
         var habit = habits[index];
+        var today = DateTime.UtcNow.Date;
 
-        habit.IsDone = true;
+        if (habit.LastCompletedDate.HasValue && habit.LastCompletedDate.Value.Date == today)
+        {
+            // Already done today
+            return habit;
+        }
+
+        // Update streak
+        if (habit.LastCompletedDate.HasValue && habit.LastCompletedDate.Value.Date == today.AddDays(-1))
+            habit.CurrentStreak++;
+        else
+            habit.CurrentStreak = 1;
+
+        habit.LastCompletedDate = today;
+        habit.LongestStreak = Math.Max(habit.LongestStreak, habit.CurrentStreak);
+
         await _habitContext.SaveChangesAsync();
         return habit;
-
     }
+
 
     public async Task<List<Habits>> GetDoneHabits(long chatId)
     {
-        return await GetAllHabits(chatId, done:true);
+        return await _habitContext.Habits
+            .Where(h => h.UserId == chatId && h.LastCompletedDate != null)
+            .OrderByDescending(h => h.LastCompletedDate)
+            .ToListAsync();
     }
 
     public async Task<List<long>> GetAllUsers()
